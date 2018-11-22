@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>login</title>
+<link rel="stylesheet" href="./css/amazeui.min.css">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<script src="./js/jquery.min.js"></script>
+<script src="./js/amazeui.min.js"></script>
+<!-- -->
+<script>
+	var __links = document.querySelectorAll('a');
+	function __linkClick(e) { 
+		parent.window.postMessage(this.href, '*');
+	} ;
+	for (var i = 0, l = __links.length; i < l; i++) {
+		if ( __links[i].getAttribute('data-t') == '_blank' ) { 
+			__links[i].addEventListener('click', __linkClick, false);
+		}
+	}
+</script>
+<script>
+	$(document).ready(function(c) {
+		$('.alert-close').on('click', function(c){
+			$('.message').fadeOut('slow', function(c){
+				$('.message').remove();
+			});
+		});	
+		$('#qrCode').on('click',function(){
+			console.log('ddd')
+			console.log($('#qrCodeBig').css('display'))
+			var a =  $('#qrCodeBig').css('display')
+			if (a == 'none'){
+				$('#qrCodeBig').css('display','')
+			} else {
+				$('#qrCodeBig').css('display','none')
+			}
+		})  
+	});
+	login = ()=>{
+		let username = $('.login').find('input[type=text]').val();
+		let password = $('.login').find('input[type=password]').val()
+		if (!username || !password) {
+			console.log('用户名和密码不能为空')
+			return;
+		}
+		$.ajax({
+			url:'/login',
+			type:'post',
+			dataType:'json',
+			data:{username:username, password:password},
+			beforeSend:function(){
+				
+			},
+			success:function(result){
+				console.log(result)
+				if(result.status == 200){
+					window.location.href='/index.html'
+				} else {
+					var u = navigator.userAgent, 
+					app = navigator.appVersion;
+					var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+					var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+					var isWindow = u.indexOf('Window') > -1 
+					if (isAndroid) {
+						//这个是安卓操作系统
+						console.log('android')
+						alert(result.msg)
+					}
+					if (isIOS) {
+				　　　　//这个是ios操作系统
+						console.log('ios')
+						// alert(result.msg)
+						showAlert(result.msg)
+					}
+					if(isWindow){
+						console.log('window')
+						showAlert(result.msg)
+            		}
+				}
+			}
+		})
+	}
+
+	showAlert=(msg)=>{
+		let $modal = $('#your-modal');
+		$('.am-modal-bd').text(msg)
+		$('.am-modal-hd').css('color','red')
+		$('.am-modal-footer > span').css('color','#3f1d40')
+		$modal.modal();
+	}
+
+</script>
+</head>
+<body>
+<!-- contact-form -->	
+	<div class="message warning">
+		<div class="inset">
+			<div class="login-head">
+				<h1>Login Form</h1>
+				<div style="position: absolute;right: 65px;top: 18px; cursor: pointer;" id="qrCode">
+					<img src="./images/qrCode_small.png" style="width:50px; height:50px"/>
+				</div>
+				<div class="alert-close"> 
+					
+				</div> 			
+			</div>
+			<form class="login">
+				<li>
+					<input type="text" class="text" value="" placeholder="请输入用户名" required><a href="#" class=" icon user"></a>
+				</li>
+					<div class="clear"> </div>
+				<li>
+					<input type="password" value="" placeholder="请输入密码" required> <a href="#" class="icon lock"></a>
+				</li>
+				<div class="clear"> </div>
+				<div class="submit">
+					<input type="submit" onclick="login()" value="Sign in" >
+					<h4><a href="#">Lost your Password ?</a></h4>
+					<div class="clear"></div>	
+				</div>	
+			</form>
+
+			<form class="forgetPassword" style="display: none">
+				<li>
+					<input type="text" class="text" value="" placeholder="请输入用户名" required><a href="#" class=" icon user"></a>
+				</li>
+					<div class="clear"> </div>
+				<li>
+					<input type="password" value="" placeholder="请输入密码" required> <a href="#" class="icon lock"></a>
+				</li>
+				<div class="clear"> </div>
+				<div class="submit">
+					<input type="submit" onclick="login()" value="Sign in">
+					<h4><a href="#">go back login ?</a></h4>
+					<div class="clear"></div>	
+				</div>	
+			</form>
+			
+		</div>	
+		<div style="width:200px; height:200px; background:red;position: absolute; top: 165px; left: 550px; display: none" id="qrCodeBig" class="qrCode_show">
+			<p>扫描二维码下载</p>
+			<img src="./images/qrCode.png">
+		</div>				
+	</div>
+	<div class="clear"> </div>
+	<!--- footer --->
+	<div class="footer">
+		<p>Copyright &copy; 2018.</p>
+	</div>
+	<!-- 模态框 -->
+	<div class="am-modal am-modal-alert" tabindex="-1" id="your-modal">
+		<div class="am-modal-dialog">
+			<div class="am-modal-hd">登录失败</div>
+			<div class="am-modal-bd">
+				
+			</div>
+			<div class="am-modal-footer">
+				<span class="am-modal-btn">确定</span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
