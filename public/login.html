@@ -11,15 +11,15 @@
 <script src="./js/amazeui.min.js"></script>
 <!-- -->
 <script>
-	var __links = document.querySelectorAll('a');
-	function __linkClick(e) { 
-		parent.window.postMessage(this.href, '*');
-	} ;
-	for (var i = 0, l = __links.length; i < l; i++) {
-		if ( __links[i].getAttribute('data-t') == '_blank' ) { 
-			__links[i].addEventListener('click', __linkClick, false);
-		}
-	}
+	// var __links = document.querySelectorAll('a');
+	// function __linkClick(e) { 
+	// 	parent.window.postMessage(this.href, '*');
+	// } ;
+	// for (var i = 0, l = __links.length; i < l; i++) {
+	// 	if ( __links[i].getAttribute('data-t') == '_blank' ) { 
+	// 		__links[i].addEventListener('click', __linkClick, false);
+	// 	}
+	// }
 </script>
 <script>
 	$(document).ready(function(c) {
@@ -38,7 +38,13 @@
 				$('#qrCodeBig').css('display','none')
 			}
 		})  
+		$('#loginForm').on('submit',function(e){
+			e.preventDefault();
+			console.log(222)
+			login()
+		})
 	});
+	
 	login = ()=>{
 		let username = $('.login').find('input[type=text]').val();
 		let password = $('.login').find('input[type=password]').val()
@@ -51,12 +57,16 @@
 			type:'post',
 			dataType:'json',
 			data:{username:username, password:password},
+			async:'false',
 			beforeSend:function(){
 				
 			},
 			success:function(result){
 				console.log(result)
 				if(result.status == 200){
+					alert(123)
+					let storage=window.localStorage;
+					storage.setItem('token', result.token)
 					window.location.href='/index.html'
 				} else {
 					var u = navigator.userAgent, 
@@ -67,7 +77,8 @@
 					if (isAndroid) {
 						//这个是安卓操作系统
 						console.log('android')
-						alert(result.msg)
+						// alert(result.msg)
+						showAlert(result.msg)
 					}
 					if (isIOS) {
 				　　　　//这个是ios操作系统
@@ -82,6 +93,7 @@
 				}
 			}
 		})
+		// event.preventDefault()
 	}
 
 	showAlert=(msg)=>{
@@ -97,27 +109,27 @@
 <body>
 <!-- contact-form -->	
 	<div class="message warning">
-		<div class="inset">
+		<div class="loginFormContainer">
 			<div class="login-head">
 				<h1>Login Form</h1>
 				<div style="position: absolute;right: 65px;top: 18px; cursor: pointer;" id="qrCode">
-					<img src="./images/qrCode_small.png" style="width:50px; height:50px"/>
+					<img src="./imgs/qrCode_small.png" style="width:50px; height:50px"/>
 				</div>
 				<div class="alert-close"> 
 					
 				</div> 			
 			</div>
-			<form class="login">
+			<form class="login" id="loginForm" method="POST" action="/login">
 				<li>
-					<input type="text" class="text" value="" placeholder="请输入用户名" required><a href="#" class=" icon user"></a>
+					<input type="username" class="text" value="" name="username" placeholder="请输入用户名" required><a href="#" class=" icon user"></a>
 				</li>
 					<div class="clear"> </div>
 				<li>
-					<input type="password" value="" placeholder="请输入密码" required> <a href="#" class="icon lock"></a>
+					<input type="password" value="" name="password" placeholder="请输入密码" required> <a href="#" class="icon lock"></a>
 				</li>
 				<div class="clear"> </div>
 				<div class="submit">
-					<input type="submit" onclick="login()" value="Sign in" >
+					<input type="submit" value="Sign in" >
 					<h4><a href="#">Lost your Password ?</a></h4>
 					<div class="clear"></div>	
 				</div>	
@@ -133,7 +145,7 @@
 				</li>
 				<div class="clear"> </div>
 				<div class="submit">
-					<input type="submit" onclick="login()" value="Sign in">
+					<!-- <input type="submit" onclick="login()" value="Sign in"> -->
 					<h4><a href="#">go back login ?</a></h4>
 					<div class="clear"></div>	
 				</div>	
@@ -142,20 +154,19 @@
 		</div>	
 		<div style="width:200px; height:200px; background:red;position: absolute; top: 165px; left: 550px; display: none" id="qrCodeBig" class="qrCode_show">
 			<p>扫描二维码下载</p>
-			<img src="./images/qrCode.png">
+			<img src="./imgs/qrCode.png">
 		</div>				
 	</div>
 	<div class="clear"> </div>
 	<!--- footer --->
 	<div class="footer">
-		<p>Copyright &copy; 2018.</p>
+		<p>Copyright &copy; 2018.(仅供学习使用)</p>
 	</div>
 	<!-- 模态框 -->
 	<div class="am-modal am-modal-alert" tabindex="-1" id="your-modal">
 		<div class="am-modal-dialog">
 			<div class="am-modal-hd">登录失败</div>
 			<div class="am-modal-bd">
-				
 			</div>
 			<div class="am-modal-footer">
 				<span class="am-modal-btn">确定</span>

@@ -1,5 +1,5 @@
 const UserSchema = require('../entity/UserSchema').UserSchema
-
+const PersonSchema = require('../entity/PersonSchema').PersonSchema
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('ftcg_test', 'root', 'Wind@2015', {
   host: '114.215.191.93',
@@ -27,5 +27,6 @@ sequelize
   });
 
   const User = sequelize.define('kn_user', UserSchema);
-
-  exports.User = User
+  const Person = sequelize.define('person', PersonSchema)
+  exports.User = User;
+  exports.Person = Person;

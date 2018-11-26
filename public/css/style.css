@@ -25,7 +25,7 @@ img{max-width:100%;}
 body{
 	font-family: 'Droid Sans', sans-serif;
 	font-size:100%;
-	background: url(../images/bg.jpg);
+	background: url(../imgs/bg.jpg);
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center;
@@ -67,7 +67,7 @@ form li{
 
 }
 .icon{
-	background:url(../images/icons.png)  no-repeat 0px 0px;
+	background:url(../imgs/icons.png)  no-repeat 0px 0px;
 	height:30px;
 	width:30px;
 	display: block;
@@ -75,24 +75,24 @@ form li{
 	margin: 12px 9px 9px 0px;
 }
 .user{
-	background: url(../images/icons.png) no-repeat 7px 1px;
+	background: url(../imgs/icons.png) no-repeat 7px 1px;
 	
 }
 .lock{
-	background: url(../images/icons.png) no-repeat -22px 1px;
+	background: url(../imgs/icons.png) no-repeat -22px 1px;
 }
 
-input[type="text"], input[type="password"] {
+input[type="username"], input[type="password"] {
 	font-family: 'Droid Sans', sans-serif;
 	width:80%;
-	padding: 0.5em 4em 0.5em 0em;
+	padding: 0.5em 0.5em 0.5em 0em;
 	color: #B8B8B8;
 	font-size:20px;
 	outline: none;
 	background: none;
 	border:none;
 }
-input[type="text"]:hover, input[type="password"]:hover{
+input[type="username"]:hover, input[type="password"]:hover{
 	color:#9E61A3;
 	
 }
@@ -164,7 +164,7 @@ input[type="submit"]:hover {
 	color:#fff
 }
 .message {
-	box-shadow: 0 0 0 1px rgba(0,0,0,0.2) inset, 0 1px 0 rgba(255,255,255,0.1) inset, 0 1px 2px rgba(0,0,0,0.4);
+	box-shadow: 0 0 0 1px rgba(0,0,0,0.2) loginFormContainer, 0 1px 0 rgba(255,255,255,0.1) loginFormContainer, 0 1px 2px rgba(0,0,0,0.4);
 	position: relative;
 }
 .warning {
@@ -178,7 +178,7 @@ input[type="submit"]:hover {
 	-o-border-radius: 6px;
 }
 .alert-close {
-	background: url('../images/into.png') no-repeat 0px 3px;
+	background: url('../imgs/into.png') no-repeat 0px 3px;
 	cursor: pointer;
 	height: 30px;
 	position: absolute;
@@ -270,9 +270,9 @@ input[type="submit"]:hover {
 	font-size: 1.15em;
 	}
 	.icon {
-		margin: -33px 9px 9px 0px;
+		margin: 9px 9px 9px 0px;
 	}
-	input[type="text"], input[type="password"] {
+	input[type="username"], input[type="password"] {
 		font-size: 16px;
 	}
 	.alert-close {
@@ -313,7 +313,7 @@ input[type="submit"]:hover {
 
 .img1 {
 	height: 48px;
-	/* background: url(../images/guid_android_01.jpg); */
+	/* background: url(../imgs/guid_android_01.jpg); */
 	background-size: 85px 45px;
 	color: white;
 	font-size: 20px;
@@ -326,7 +326,7 @@ input[type="submit"]:hover {
 }
 .img2 {
 	height: 48px;
-	/* background: url(../images/guid_android_02.jpg); */
+	/* background: url(../imgs/guid_android_02.jpg); */
 	background-size: 205px 36px;
 	color: white;
 	font-size: 20px;
