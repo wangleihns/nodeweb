@@ -1,13 +1,40 @@
 const Router = require('koa-router')
 const router = new Router()
 const service = require('./service/service').Service;
+const jwtKoa = require('koa-jwt');
+const jwt = require('./jwt/jwtUtil').jwt;
+const jwtUtil = require('./jwt/jwtUtil').jwtUtil;
+const redisUtil = require('./redis/redis').redisUtil;
+const redis = require('./redis/redis').redis;
+
+let payload = jwtUtil.config;
+
+let checkHeader = async (ctx, next,token)=>{
+    let payload = jwtUtil.decode(token);
+        console.log('id', payload.id)
+        let tokenFromRedis =await redisUtil.get(payload.id);
+        console.log('tokenFromRedis:'+tokenFromRedis)
+        console.log(token == tokenFromRedis)
+        return token == tokenFromRedis
+}
 
 let auth = async (ctx, next)=>{
-    console.log(ctx.request.url)
     let requestPath = ctx.path;
+    let token = ctx.header.authorization
+    console.log("header:" + token)
     if(requestPath == '/checkLogin'){
-        let param = Number(ctx.query.token);
-        if(param != 123){
+       let flag =  checkHeader(ctx, next, token)
+        if(!flag){
+            ctx.body={
+                status:403,
+                msg:'受保护资源'
+            }
+        } else {
+            await next();
+        }
+    } else if (requestPath == '/getData') {
+       let flag =  checkHeader(ctx, next, token)
+        if(!flag){
             ctx.body={
                 status:403,
                 msg:'受保护资源'
@@ -17,7 +44,7 @@ let auth = async (ctx, next)=>{
         }
     } else {
         await next();
-    }   
+    } 
 }
 router.use(auth)
 
@@ -77,7 +104,44 @@ router.get('/a', async ctx=>{
         msg:'轮播图片地址',
         data:arr
     }
-}).post('/login', service.getEntityByName)
+}).post('/login', async(ctx) =>{
+    console.log(ctx.request.body)
+    let loginData = ctx.request.body;
+    let username = loginData.username;
+    let password = loginData.password;
+    let user = await service.getEntityByName(username);
+    if(user != null) {
+        if(user.password == password){
+            flag = true
+        } else {
+            rflag = false;
+        }
+    } else {
+            flag = false;
+    }
+    if(flag){
+        payload.payload.id = user.id
+        console.log(payload.payload)
+        let token = await jwtUtil.encode(payload.payload, '123');
+        let userId = user.id;
+        try {
+           await redisUtil.setExpire(userId, token,jwtUtil.exp)
+        } catch (error) {
+            // assert.isNotOk(error,'Promise error');
+            // done();
+        }
+        ctx.body={
+            status:200,
+            msg:'登录成功',
+            token:token
+        }
+    } else {
+        ctx.body={
+            status:500,
+            msg:'用户名或密码不正确'
+        }
+    }
+})
 .get('/checkLogin', async(ctx, next)=>{
     ctx.body={
         status:200,
@@ -87,10 +151,7 @@ router.get('/a', async ctx=>{
     let person = ctx.request.body
     console.log(person)
     if(!person.name&& !person.age && !person.comment){
-        ctx.body={
-            status:500,
-            msg:'没有传值',
-        }
+        ctx.throw(500,'请输入信息')
     }
     await service.save(person);
     ctx.body={
@@ -104,10 +165,7 @@ router.get('/a', async ctx=>{
     let age = ctx.query.age;
     let comment = ctx.query.comment;
     if(!name && !age && !comment){
-        ctx.body={
-            status:500,
-            msg:'没有传值',
-        }
+        ctx.throw(500,'请输入信息')
     }
 
     let person = {
@@ -120,6 +178,13 @@ router.get('/a', async ctx=>{
         status:200,
         msg:'保存成功',
         data:person
+    }
+}).get('/getJwt', async(ctx, next)=>{
+    let t = await jwt.sign({ foo: 'bar' }, '123');
+    ctx.body={
+        status:200,
+        msg:'保存成功',
+        data:t
     }
 })
 

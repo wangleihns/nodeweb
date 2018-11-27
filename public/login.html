@@ -46,7 +46,7 @@
 	});
 	
 	login = ()=>{
-		let username = $('.login').find('input[type=text]').val();
+		let username = $('.login').find('input[type=username]').val();
 		let password = $('.login').find('input[type=password]').val()
 		if (!username || !password) {
 			console.log('用户名和密码不能为空')
@@ -64,7 +64,6 @@
 			success:function(result){
 				console.log(result)
 				if(result.status == 200){
-					alert(123)
 					let storage=window.localStorage;
 					storage.setItem('token', result.token)
 					window.location.href='/index.html'
@@ -121,11 +120,11 @@
 			</div>
 			<form class="login" id="loginForm" method="POST" action="/login">
 				<li>
-					<input type="username" class="text" value="" name="username" placeholder="请输入用户名" required><a href="#" class=" icon user"></a>
+					<input type="username" class="text" value="wanglei" name="username" placeholder="请输入用户名" required><a href="#" class=" icon user"></a>
 				</li>
 					<div class="clear"> </div>
 				<li>
-					<input type="password" value="" name="password" placeholder="请输入密码" required> <a href="#" class="icon lock"></a>
+					<input type="password" value="123456" name="password" placeholder="请输入密码" required> <a href="#" class="icon lock"></a>
 				</li>
 				<div class="clear"> </div>
 				<div class="submit">

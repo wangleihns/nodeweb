@@ -3,6 +3,7 @@ const cors = require('koa2-cors')
 const server = require('koa-static');
 const koaBody = require('koa-body');
 const router = require('./router').router;
+const jwtKoa = require('koa-jwt');
 const app = new Koa();
 app.use(koaBody())
 app.use(cors())
