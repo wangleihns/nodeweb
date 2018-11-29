@@ -362,7 +362,8 @@ li.lishow:hover{
 	cursor:pointer;
 	margin-bottom:10px;
 	color:#000000;
-	border-radius:5px
+	border-radius:5px;
+	background: #c9452b;
 }
 #plan_left_black li:hover{
 	background-color:#e3e3e3;
@@ -386,7 +387,7 @@ li.lishow:hover{
 	position:relative;
 	z-index:997
 }
-#plan_right{
+#right_content{
 	float:left;
 	height:80%;
 }
@@ -408,4 +409,62 @@ input{outline:none}
 	#navul li{
 		margin-left: -10px
 	}
+}
+
+@media(max-width:1280px){
+	#search input{
+		width: 190px
+	}
+}
+
+.buttonActive{
+	background-color: bisque !important;
+	color:#000000 !important
+}
+.am-btn-define{
+	height: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    background-color: #c9452b;
+    color: #FFFFFF;
+    border-radius: 8px !important;
+    margin-left: 5px;
+	width: 75px;
+	outline:0;
+	border: none;
+	font-size: 14px
+}
+
+.am-bn-width{
+	width: 100px !important;
+}
+
+.am-btn-define:hover{
+	background-color:#e3e3e3;
+	color:#000000
+}
+
+.myModalColor{
+	background-color: bisque;
+	border-radius: 10px !important
+}
+.myModalHeader{
+	background-color: #c9452b ;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	margin-bottom: 10px;
+}
+.myModalContent{
+	font-size: 18px !important;
+}
+.paginate_button:hover{
+	background-color: #c9452b !important;
+	color: #FFF !important;
+}
+
+
+.trSelected{
+	background-color: bisque !important;
 }

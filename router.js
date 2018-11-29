@@ -10,12 +10,23 @@ const redis = require('./redis/redis').redis;
 let payload = jwtUtil.config;
 
 let checkHeader = async (ctx, next,token)=>{
-    let payload = jwtUtil.decode(token);
-        console.log('id', payload.id)
+    console.log(!token)
+    if(token !=null && token !='' && token != 'null'){
+        console.log('token',token)
+        let payload = jwtUtil.decode(token);
+        // console.log('id', payload.id)
         let tokenFromRedis =await redisUtil.get(payload.id);
-        console.log('tokenFromRedis:'+tokenFromRedis)
-        console.log(token == tokenFromRedis)
-        return token == tokenFromRedis
+        // console.log('tokenFromRedis:'+tokenFromRedis)
+        // console.log(token == tokenFromRedis)
+        if(token == tokenFromRedis){
+            return true;
+        } else {
+            return  false;
+        }
+    } else {
+        return false;
+    }
+   
 }
 
 let auth = async (ctx, next)=>{
@@ -23,13 +34,19 @@ let auth = async (ctx, next)=>{
     let token = ctx.header.authorization
     console.log("header:" + token)
     if(requestPath == '/checkLogin'){
-       let flag =  checkHeader(ctx, next, token)
+       let flag = false; 
+      let a = await checkHeader(ctx, next, token).then((v)=>{
+            flag = v;
+       })
+       console.log(a)
+       console.log('flag', flag)
         if(!flag){
             ctx.body={
                 status:403,
                 msg:'受保护资源'
             }
         } else {
+            console.log('next')
             await next();
         }
     } else if (requestPath == '/getData') {
@@ -186,6 +203,20 @@ router.get('/a', async ctx=>{
         msg:'保存成功',
         data:t
     }
-})
+}).get('/getUserInfo', async(ctx, next)=>{
+    let token = ctx.header.authorization
+    let payload = jwtUtil.decode(token);
+    let userId = payload.id;
+    let user = null 
+    await service.getUserInfo(userId).then((v)=>{
+        user = v
+    })
+    console.log('userinfo:',user);
+    ctx.body={
+        status:200,
+        msg:'用户信息',
+        data:user
+    }
+}),
 
 exports.router = router

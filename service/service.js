@@ -10,7 +10,7 @@ exports.Service ={
        
         console.log(username)
         let user = await User.findOne({where:{
-            [Op.or]:[{name:username},{phone:username}]
+            [Op.or]:[{loginName:username},{phone:username}]
         }})
         return user;
         
@@ -19,12 +19,16 @@ exports.Service ={
         Person.create(person)
     },
     findAllPerson: async(ctx)=>{
-        let persons = await Person.findAll()
+        let persons = await Person.findAll({limit: 100})
         ctx.body = {
             status:200,
             msg:'liebiao',
             data:persons
         }
+    },
+    getUserInfo: async(id)=>{
+        let user =  await User.findById(id)
+        return user;
     }
 
 }

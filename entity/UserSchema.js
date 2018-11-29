@@ -40,6 +40,10 @@ const UserSchema = {
         type: Sequelize.STRING,
         field:'login_time'
     },
+    loginName:{
+        type: Sequelize.STRING,
+        field:'login_name'
+    },
     name: {
         type: Sequelize.STRING,
         field:'name'
