@@ -364,16 +364,24 @@ input[type="submit"]:hover {
 	float: left;
 }
 .lock-div{
-	float: left;
-	margin-left: 15px;
-	margin-right: 15px;
+	padding-left:0px !important;
+	padding-right:0px !important;
 }
 .lock-input{
     height: 50px;
     font-size: 20px !important;
-    border-radius: 5px !important;
+	border-radius: 5px !important;
+	width: 94% !important;
+	border:  1px solid #7d6b58 !important;
+	padding-left: 10px !important
 }
-
+.lock-input-label{
+	line-height: 50px;
+	text-align:center ;
+	height: 50px;
+	padding-left:0px !important;
+	padding-right:0px !important;
+}
 .lock-button{
 	float: left;
 	height: 50px;
@@ -386,4 +394,49 @@ input[type="submit"]:hover {
 	padding: 0px 20px;
 	
 }
+.lock-button:hover{
+	background-color: bisque !important;
+	cursor: pointer;
+}
 
+@media(max-width:480px){
+	.lock-input{
+		height: 40px;
+		font-size: 16px !important;
+		border-radius: 5px !important;
+		width: 95% !important;
+		border: 1px solid #7d6b58 !important;
+	}
+	.lock-input-label{
+		line-height: 40px;
+		text-align:end; 
+		height: 40px;
+		padding-left:0px !important;
+		padding-right:0px !important;
+	}
+	.lock-button{
+		float: left;
+		height: 40px;
+		border-radius: 5px !important;
+		border: none;
+		background-color:#c9452b;
+		text-align: center;
+		vertical-align: middle;
+		line-height: 40px;
+		padding: 0px 20px;
+	}
+}
+
+@media(max-width:320px){
+	.lock-input{
+		height: 40px;
+		font-size: 16px !important;
+		border-radius: 5px !important;
+		width: 95% !important;
+		border:  1px solid #7d6b58 !important;
+	}
+}
+
+.modalTop{
+	margin-top:0px !important;
+}

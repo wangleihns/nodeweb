@@ -7,24 +7,143 @@
     <title>lock</title>
     <link rel="stylesheet" href="./css/amazeui.min.css">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script language="javascript" src="./assets/js/jquery.min.js"></script>
+    <script language="javascript" src="./assets/js/amazeui.min.js"></script>
+    <style>
+        .am-container {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            width: 100%;
+            height: 300px;
+
+        }
+        @media only screen and (min-width:641px) {
+        .am-container {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        }
+        body{
+            margin: 0;
+            padding: 0;
+            text-align: center
+        }
+    </style>
 </head>
 <body>
-    <div style="width:300px; height:300px; margin: 0 auto;">
-        <form class="am-form am-form-horizontal">
-            <div class="am-form-group">
-                    <div class="lock-div" style="display: none">
-                            <input type="username" id="doc-ipt-1" placeholder="输入你的密码" class="lock-input" >
-                    </div>
-                    <label for="doc-ipt-3" class="lock-label">密码:</label>
-                    <div class="lock-div">
-                        <input type="password" id="doc-ipt-3" placeholder="输入你的密码" class="lock-input" >
-                    </div>
-                    <div class="lock-button">
-                       <span>提交登入</span>
-                    </div>
+    <div class="am-container">
+        <div class="am-g" style="margin:250px auto">
+              
+            <div class="am-u-sm-7 lock-div" style="display:none">
+                <input type="username" id="doc-ipt-user" placeholder="输入用户名" class="lock-input" >
             </div>
-        </form>
+            <div class="am-u-sm-2 lock-input-label am-animation-slide-left">密码:</div>
+            <div class="am-u-sm-7 lock-div am-animation-scale-up">
+                    <input type="password" id="doc-ipt-password" placeholder="输入你的密码" class="lock-input" >
+            </div>
+            <div class="am-u-sm-3 lock-button am-animation-slide-right" id=login>
+                <div>
+                    <span>登录</span>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- 模态框 -->
+	<div class="am-modal am-modal-alert" tabindex="-1" id="your-modal">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">登录失败</div>
+                <div class="am-modal-bd">
+                </div>
+                <div class="am-modal-footer">
+                    <span class="am-modal-btn">确定</span>
+                </div>
+            </div>
+        </div>
 </body>
+    <script>
+        $(function(){
+            let storage =  window.localStorage
+           
+           $('#login').click(function(){
+                let username = storage.getItem('username');
+                let password = $('#doc-ipt-password').val();
+                login(username, password)
+           })
+           $(window).keydown(function(event){
+            switch(event.keyCode) {
+                // ...
+                // 不同的按键可以做不同的事情
+                // 不同的浏览器的keycode不同
+                // 更多详细信息:     http://unixpapa.com/js/key.html
+                // 常用keyCode： 空格 32   Enter 13   ESC 27
+                case 13:
+                    let username = storage.getItem('username');
+                    let password = $('#doc-ipt-password').val();
+                    login(username, password);
+                    break;
+            }
+            });
+        })
+
+        login = (username, password)=>{
+            if (!username || !password) {
+                console.log('用户名和密码不能为空')
+                showAlert('请输入密码')
+                return;
+            }
+            $.ajax({
+                url:'/login',
+                type:'post',
+                dataType:'json',
+                data:{username:username, password:password},
+                async:'false',
+                beforeSend:function(){
+                    
+                },
+                success:function(result){
+                    console.log(result)
+                    if(result.status == 200){
+                        let storage=window.localStorage;
+                        storage.setItem('token', result.token)
+                        window.location.href='/index.html'
+                    } else {
+                        var u = navigator.userAgent, 
+                        app = navigator.appVersion;
+                        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+                        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                        var isWindow = u.indexOf('Window') > -1 
+                        if (isAndroid) {
+                            //这个是安卓操作系统
+                            console.log('android')
+                            // alert(result.msg)
+                            showAlert(result.msg)
+                        }
+                        if (isIOS) {
+                    　　　　//这个是ios操作系统
+                            console.log('ios')
+                            // alert(result.msg)
+                            showAlert(result.msg)
+                        }
+                        if(isWindow){
+                            console.log('window')
+                            showAlert(result.msg)
+                        }
+                    }
+                }
+            })
+		    // event.preventDefault()
+        }
+
+        showAlert=(msg)=>{
+            let $modal = $('#your-modal');
+            $('.am-modal-bd').text(msg)
+            $('.am-modal-hd').css('color','red')
+            $('.am-modal-footer > span').css('color','#3f1d40')
+            $modal.modal();
+        }
+    </script>
 </html>
 

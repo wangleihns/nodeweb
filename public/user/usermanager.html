@@ -50,8 +50,6 @@
 
 <script>
      $(function(){
-       
-
         mouseup();
         getLiContentData();
         showDynamicColumnsModal();
@@ -72,7 +70,9 @@
      */
     let table = null;
     function getLiContentData(){
-       table =  $('#example').DataTable({
+        let storage=window.localStorage;
+        let token = storage.getItem('token')
+        table =  $('#example').DataTable({
             "ajax": {
                   "url":'/getData',
                   "type":"get",

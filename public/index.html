@@ -113,7 +113,8 @@
 			console.log(time)
 			if(time == 0){
 				console.log('time over')
-				window.location.href='/login.html'
+				storage.removeItem('token')
+				window.location.href='/lock.html'
 			}
 		}, 1000)
 		
@@ -135,9 +136,10 @@
 
 	function checkLogin(){
 		$.ajax({
-			url:'/checkLogin',
+			url:'/checkLogin?type='+Math.random(),
 			type:'get',
 			dataType:'json',
+			async:false,
 			beforeSend:(xhr)=>{
 				xhr.setRequestHeader('Authorization',token);
 			},
@@ -153,6 +155,7 @@
 	function logout(){
 		$('#loginout').on('click', ()=>{
 			storage.removeItem('token')
+			storage.removeItem('username')
 			window.location.href='/login.html'
 		})
 	}
@@ -201,14 +204,11 @@
 				if(result.status ==200){
 					let user = result.data
 					$('#nickname').find('div').eq(0).text(user.name)
+					storage.setItem('username', user.phone)
 				}
 			}
 		})
 	}
-
-	
-
-	
 </script>
 <script language="javascript">
 		$.AMUI.progress.done();

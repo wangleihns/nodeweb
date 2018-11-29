@@ -38,7 +38,6 @@ let auth = async (ctx, next)=>{
       let a = await checkHeader(ctx, next, token).then((v)=>{
             flag = v;
        })
-       console.log(a)
        console.log('flag', flag)
         if(!flag){
             ctx.body={
@@ -128,14 +127,17 @@ router.get('/a', async ctx=>{
     let password = loginData.password;
     let user = await service.getEntityByName(username);
     if(user != null) {
+
         if(user.password == password){
             flag = true
         } else {
-            rflag = false;
+            flag = false;
         }
     } else {
             flag = false;
     }
+    console.log('wodeflag', user.password == password)
+    console.log('wodeflag', flag)
     if(flag){
         payload.payload.id = user.id
         console.log(payload.payload)
@@ -176,7 +178,17 @@ router.get('/a', async ctx=>{
         msg:'保存成功',
         data:person
     }
-}).get('/getData', service.findAllPerson)
+}).get('/getData', async(ctx, next)=>{
+    let persons
+    await service.findAllPerson().then((value)=>{
+        persons = value;
+    });
+    ctx.body = {
+        status:200,
+        msg:'liebiao',
+        data:persons
+    }
+})
 .get('/saveData', async ctx=>{
     let name = ctx.query.name;
     let age = ctx.query.age;
@@ -205,13 +217,22 @@ router.get('/a', async ctx=>{
     }
 }).get('/getUserInfo', async(ctx, next)=>{
     let token = ctx.header.authorization
-    let payload = jwtUtil.decode(token);
+    let payload =null;
+    try {
+        payload = jwtUtil.decode(token);
+    } catch (error) {
+        ctx.body={
+            status:500,
+            msg:'用户信息失败',
+        }
+    }
+   
     let userId = payload.id;
     let user = null 
     await service.getUserInfo(userId).then((v)=>{
         user = v
     })
-    console.log('userinfo:',user);
+    // console.log('userinfo:',user);
     ctx.body={
         status:200,
         msg:'用户信息',

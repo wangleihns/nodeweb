@@ -20,11 +20,7 @@ exports.Service ={
     },
     findAllPerson: async(ctx)=>{
         let persons = await Person.findAll({limit: 100})
-        ctx.body = {
-            status:200,
-            msg:'liebiao',
-            data:persons
-        }
+        return persons;
     },
     getUserInfo: async(id)=>{
         let user =  await User.findById(id)
